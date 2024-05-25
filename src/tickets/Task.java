@@ -7,10 +7,10 @@ public class Task {
     private String typeTicket;// = "Task1";
     private String nameTicket;
     private String descTicket;
-    private Status statusTicket = Status.NEW;
+    private Status statusTicket;// = Status.NEW;
 
-    public Task(String nameTicket, String descTicket, Status statusTicket) {
-        this.typeTicket = "Task"; //
+    public Task(String typeTicket, String nameTicket, String descTicket, Status statusTicket) {
+        this.typeTicket = typeTicket; //
         this.nameTicket = nameTicket;
         this.descTicket = descTicket;
         this.statusTicket = statusTicket;
@@ -18,6 +18,9 @@ public class Task {
     }
 
 
+    public void setStatusTicket(Status statusTicket) {
+        this.statusTicket = statusTicket;
+    }
 
     public void setIdTicket(int idTicket) {
         this.idTicket = idTicket;

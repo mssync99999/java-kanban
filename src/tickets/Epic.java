@@ -5,15 +5,13 @@ import java.util.Objects;
 
 
 public class Epic extends Task{
-    private String typeTicket = "Epic";
-    private Status statusTicket = Status.NEW;
-
     private ArrayList<Subtask> childSubtasks = new ArrayList<>();
 
 
-    public Epic(String nameTicket, String descTicket, Status statusTicket) {
+    public Epic(String typeTicket, String nameTicket, String descTicket) {
         // сначала вызываем конструктор класса-родителя
-        super(nameTicket, descTicket, statusTicket);
+        super(typeTicket, nameTicket, descTicket, Status.NEW);//вызываем родителя с дефолтным Status.NEW
+
         // затем инициализируем новые поля
     }
 
@@ -21,9 +19,13 @@ public class Epic extends Task{
         return childSubtasks;
     }
 
-    //запоминае список субтаксов, которые связаны с этим эпиков
+    //запоминает список субтаксов, которые связаны с этим эпиков
     public void addSubtask(Subtask subtask) {
-        childSubtasks.add(subtask);
+        //System.out.println(childSubtasks.contains(subtask));
+        if (childSubtasks.contains(subtask)==false){
+            childSubtasks.add(subtask);
+        }
+
         updateStatus(); //обновление статуса эпика
 
     }
@@ -56,26 +58,18 @@ public class Epic extends Task{
 
         //присвоение общего статуса субтасков родительскому эпику
         if (doneCount == childSubtasks.size()) {
-            statusTicket = Status.DONE;
+            //statusTicket = Status.DONE;
+            setStatusTicket(Status.DONE);
         } else if (workCount == childSubtasks.size()) {
-            statusTicket = Status.IN_PROGRESS;
+            //statusTicket = Status.IN_PROGRESS;
+            setStatusTicket(Status.IN_PROGRESS);
         } else if (newCount == childSubtasks.size()) {
-            statusTicket = Status.NEW;
+            //statusTicket = Status.NEW;
+            setStatusTicket(Status.NEW);
         }
 
 
     }
-
-    @Override
-    public String getTypeTicket() {
-        return this.typeTicket;
-    }
-
-    @Override
-    public Status getStatusTicket() {
-        return statusTicket;
-    }
-
 
     //Также советуем применить знания о методах equals() и hashCode()
     @Override
@@ -83,13 +77,11 @@ public class Epic extends Task{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Epic epic = (Epic) o;
-        return Objects.equals(typeTicket, epic.typeTicket) && statusTicket == epic.statusTicket && Objects.equals(childSubtasks, epic.childSubtasks);
+        return Objects.equals(childSubtasks, epic.childSubtasks);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(typeTicket, statusTicket, childSubtasks);
+        return Objects.hashCode(childSubtasks);
     }
-
-
 }

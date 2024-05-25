@@ -1,3 +1,4 @@
+import controllers.TaskManager;
 import tickets.Epic;
 import tickets.Status;
 import tickets.Subtask;
@@ -15,82 +16,104 @@ public class Main {
 
 
         //Создайте две задачи.
-        Task t1 = new Task("Task1","Desc1", Status.NEW);
-        manager.createTicket(t1);
-        Task t2 = new Task("Task2","Desc2", Status.NEW);
-        manager.createTicket(t2);
+        Task t1 = new Task("Task","Task1","Desc1", Status.NEW);
+        manager.createTask(t1);
+        Task t2 = new Task("Task","Task2","Desc2", Status.NEW);
+        manager.createTask(t2);
 
         //Создайте также эпик с двумя подзадачами.
-        Epic e1 = new Epic("Epic1","Desc3", Status.NEW);
-        manager.createTicket(e1);
-        Subtask s1 = new Subtask("Subtask1","Desc4", Status.NEW, e1);
-        Subtask s2 = new Subtask("Subtask2","Desc5", Status.NEW, e1);
-        manager.createTicket(s1);
-        manager.createTicket(s2);
+        Epic e1 = new Epic("Epic","Epic1","Desc3");
+        manager.createEpic(e1);
+        Subtask s1 = new Subtask("Subtask","Subtask1","Desc4", Status.NEW, e1);
+        Subtask s2 = new Subtask("Subtask","Subtask2","Desc5", Status.NEW, e1);
+        manager.createSubtask(s1);
+        manager.createSubtask(s2);
 
         //Создайте эпик с одной подзадачей.
-        Epic e2 = new Epic("Epic2","Desc6", Status.NEW);
-        manager.createTicket(e2);
-        Subtask s3 = new Subtask("Subtask3","Desc7", Status.NEW, e2);
-        manager.createTicket(s3);
+        Epic e2 = new Epic("Epic","Epic2","Desc6");
+        manager.createEpic(e2);
+        Subtask s3 = new Subtask("Subtask","Subtask3","Desc7", Status.NEW, e2);
+        manager.createSubtask(s3);
 
         //Распечатайте списки эпиков, задач и подзадач через System.out.println(..).
-        getTest(manager); //проверка
+        getTestTask(manager, 1); //проверка
 
         //Измените статусы созданных объектов, распечатайте их.
         // Проверьте, что статус задачи и подзадачи сохранился,
         // а статус эпика рассчитался по статусам подзадач.
-        Subtask upds1 = new Subtask("Subtask1 new","Desc4", Status.DONE, e1);
-        Subtask upds2 = new Subtask("Subtask2 new","Desc5", Status.DONE, e1);
-        manager.updateTicket(upds1, s1);
-        manager.updateTicket(upds2, s2);
-        getTest(manager); //проверка
+        Subtask upds1 = new Subtask("Subtask","Subtask1 new","Desc4", Status.DONE, e1);
+        Subtask upds2 = new Subtask("Subtask","Subtask2 new","Desc5", Status.DONE, e1);
+        manager.updateSubtask(upds1, s1);
+        manager.updateSubtask(upds2, s2);
+        getTestTask(manager, 2); //проверка
 
         //И, наконец, попробуйте удалить одну из задач и один из эпиков.
-        manager.killIdTicket(t1.getIdTicket());
-        manager.killIdTicket(e1.getIdTicket());
-        getTest(manager);
+        manager.killIdTask(t1.getIdTicket());
+        manager.killIdEpic(e1.getIdTicket());
+        getTestTask(manager, 3);
     }
 
 
 
 
-    public static void getTest(TaskManager taskManager){
-        HashMap<Integer, Object> h = taskManager.getFullTickets();
-        ///String nameClass;
-        System.out.println("-".repeat(30));
+    public static void getTestTask(TaskManager taskManager,int numberOfTest){
+        ArrayList<Task> h = taskManager.getTasks();
 
-        for (Integer i : h.keySet()) { //цикл
+        System.out.println("-".repeat(30) + "Номет теста: " + numberOfTest + "-".repeat(30));
+        System.out.println("-".repeat(10) + "Список Task" + "-".repeat(10));
 
-            Task o = (Task) h.get(i); //nameClass = h.get(i).getClass().getSimpleName();
-
-
-
+        for (Task o : h) { //цикл
             System.out.println("Тип тикета: " + o.getTypeTicket());
             System.out.println("Уникальный номер: " + o.getIdTicket());
-            if (o.getTypeTicket() == "Epic") { //для эпика необходима другая реализация
-                Epic oo = (Epic) h.get(i);
-                System.out.println("Статус_эпика: " + oo.getStatusTicket());
-            } else {
-                System.out.println("Статус: " + o.getStatusTicket());
-            }
-
+            System.out.println("Статус: " + o.getStatusTicket());
             System.out.println("Название: " + o.getNameTicket());
             System.out.println("Описание: " + o.getDescTicket());
 
+            System.out.println("-".repeat(5));
+        } //цикл
 
-            if (o.getTypeTicket() == "Epic") {
-                Epic te = (Epic) o;
+        getTestEpic(taskManager);
+    }
 
-                ArrayList<Subtask> childSubtasks = te.getChildSubtasks();
-                for (Subtask ts: childSubtasks) {
-                    System.out.println("Дочерний субтакс имеет статус: " + ts.getStatusTicket());
-                }
+    public static void getTestEpic(TaskManager taskManager){
+        ArrayList<Epic> h = taskManager.getEpics();
+
+        System.out.println("-".repeat(10) + "Список Epic" + "-".repeat(10));
+
+        for (Epic o : h) { //цикл
+            System.out.println("Тип тикета: " + o.getTypeTicket());
+            System.out.println("Уникальный номер: " + o.getIdTicket());
+            System.out.println("Статус: " + o.getStatusTicket());
+            System.out.println("Название: " + o.getNameTicket());
+            System.out.println("Описание: " + o.getDescTicket());
+
+            ArrayList<Subtask> childSubtasks = o.getChildSubtasks();
+            for (Subtask ts: childSubtasks) {
+                System.out.println("Дочерний субтакс имеет статус: " + ts.getStatusTicket());
             }
 
-            System.out.println("-".repeat(10));
+            System.out.println("-".repeat(5));
         } //цикл
-        System.out.println("-".repeat(30));
+
+        getTestSubtask(taskManager);
+    }
+
+    public static void getTestSubtask(TaskManager taskManager){
+        ArrayList<Subtask> h = taskManager.getSubtasks();
+
+        System.out.println("-".repeat(10) + "Список Subtask" + "-".repeat(10));
+
+        for (Subtask o : h) { //цикл
+            System.out.println("Тип тикета: " + o.getTypeTicket());
+            System.out.println("Уникальный номер: " + o.getIdTicket());
+            System.out.println("Статус: " + o.getStatusTicket());
+            System.out.println("Название: " + o.getNameTicket());
+            System.out.println("Описание: " + o.getDescTicket());
+
+            System.out.println("-".repeat(5));
+        } //цикл
+
+
     }
 
 }
