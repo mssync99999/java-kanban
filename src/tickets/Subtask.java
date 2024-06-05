@@ -22,11 +22,7 @@ public class Subtask extends Task{
     }
 
 
-    //Также советуем применить знания о методах equals() и hashCode()
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(parentEpic);
-    }
+
 
 
 

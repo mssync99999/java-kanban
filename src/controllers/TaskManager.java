@@ -5,157 +5,57 @@ import tickets.Subtask;
 import tickets.Task;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
-public class TaskManager {
-
-
-    //Хранение задач
-    HashMap<Integer, Task> tasks = new HashMap<>();
-    HashMap<Integer, Epic> epics = new HashMap<>();
-    HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    int idTicket = 1; //инициализируем счётчик id
-
-    //Констуктор
-    public TaskManager() {
-    }
-
+public interface TaskManager {
 
     //a. Получение списка всех задач.
-    public ArrayList<Task> getTasks() {
-        return new ArrayList<>(tasks.values());
-    }
-    public ArrayList<Subtask> getSubtasks() {
-        ArrayList<Subtask> tasks = new ArrayList<>(subtasks.values());
-        return tasks;
-    }
-    public ArrayList<Epic> getEpics() {
-        ArrayList<Epic> tasks = new ArrayList<>(epics.values());
-        return tasks;
-    }
+    public ArrayList<Task> getTasks();
+
+    public ArrayList<Subtask> getSubtasks();
+
+    public ArrayList<Epic> getEpics() ;
 
     //b. Удаление всех задач.
-    public void clearTasks() {
-        tasks.clear();
-    }
-    public void clearEpics() {
-        epics.clear();
-    }
-    public void clearSubTasks() {
-        subtasks.clear();
-    }
+    public void clearTasks();
 
+    public void clearEpics();
+
+    public void clearSubTasks();
 
     //c. Получение по идентификатору.
-    public Task getIdTask(Integer t) {
-        if (!tasks.containsKey(t)) {
-            return null; //Тикет не найден
-        }
-        return tasks.get(t);
-    }
+    public Task getIdTask(Integer t) ;
 
-    public Epic getIdEpic(Integer t) {
-        if (!epics.containsKey(t)) {
-            return null; //Тикет не найден
-        }
-        return epics.get(t);
-    }
+    public Epic getIdEpic(Integer t);
 
-    public Subtask getIdSubtask(Integer t) {
-        if (!subtasks.containsKey(t)) {
-            return null; //Тикет не найден
-        }
-
-        return subtasks.get(t);
-    }
+    public Subtask getIdSubtask(Integer t);
 
     //d. Создание. Сам объект должен передаваться в качестве параметра.
-    public void createTask(Task o) {
-        tasks.put(idTicket, o); //новый тикет в хэш
-        o.setIdTicket(idTicket);
-        idTicket++; //инкримент счётчика уникальных id
-    }
+    public void createTask(Task o);
 
-    public void createEpic(Epic o) {
-        epics.put(idTicket, o); //новый тикет в хэш
-        o.setIdTicket(idTicket);
-        idTicket++; //инкримент счётчика уникальных id
-    }
+    public void createEpic(Epic o);
 
-    public void createSubtask(Subtask o) {//public void createTicket(Subtask o, Epic e)
-        subtasks.put(idTicket, o); //новый тикет в хэш
-        o.setIdTicket(idTicket);
-        o.getParentEpic().addSubtask(o); //добавить подзадачу в список родительского Epic и пересчитать статус Epic
-        idTicket++; //инкримент счётчика уникальных id
-    }
+    public void createSubtask(Subtask o);
 
     //e. Обновление. Новая версия объекта с верным идентификатором передаётся в виде параметра.
-    public void updateTask(Task upd, Task old) {
-        //System.out.println(old.getIdTicket());
-        upd.setIdTicket(old.getIdTicket());
-        tasks.put(old.getIdTicket(), upd);
-    }
+    public void updateTask(Task upd, Task old);
 
-    public void updateEpic(Epic upd, Epic old) {
-        //System.out.println(old.getIdTicket());
-        upd.setIdTicket(old.getIdTicket());
-        epics.put(old.getIdTicket(), upd);
-    }
+    public void updateEpic(Epic upd, Epic old);
 
-    public void updateSubtask(Subtask upd, Subtask old) {
-        //System.out.println(old.getIdTicket());
-        upd.setIdTicket(old.getIdTicket());
-        subtasks.put(old.getIdTicket(), upd);
-
-        Epic parentEpic = old.getParentEpic();
-
-        parentEpic.getChildSubtasks().remove(old);
-        parentEpic.updateStatus(); //Обновление статуса эпиков на основе статусов субтасков
-
-    }
+    public void updateSubtask(Subtask upd, Subtask old);
 
     //f. Удаление по идентификатору.
-    public void killIdTask(Integer t) {
-        if (!tasks.containsKey(t)) {
-            return; //Тикет не найден
-        }
-        tasks.remove(t);
-    }
+    public void killIdTask(Integer t);
 
-    public void killIdEpic(Integer t) {
-        if (!epics.containsKey(t)) {
-            return; //Тикет не найден
-        }
+    public void killIdEpic(Integer t);
 
-        ArrayList<Subtask> childSubtasks = getSubtaskOfEpic(epics.get(t));
-        for(Subtask s: childSubtasks){ //удаление субтаксов эпиков
-            subtasks.remove(s.getIdTicket());
-        }
-
-        epics.remove(t);
-    }
-
-    public void killIdSubtask(Integer t) {
-
-        if (!subtasks.containsKey(t)) {
-            return; //Тикет не найден
-        }
-
-        Subtask s = subtasks.get(t);
-        s.getParentEpic().killSubtask(s); //подчищаем связанных с эпиком субтасков
-
-
-        subtasks.remove(t);
-    }
+    public void killIdSubtask(Integer t);
 
     //Дополнительные методы:
     //a. Получение списка всех подзадач определённого эпика.
-    public ArrayList<Subtask> getSubtaskOfEpic(Epic e) {
-        if (e == null) return null;
+    public ArrayList<Subtask> getSubtaskOfEpic(Epic e);
 
-        return e.getChildSubtasks();
-    }
-
-
+    //История просмотров задач - 10 последних задач
+    public List<Task> getHistory();
 
 }
