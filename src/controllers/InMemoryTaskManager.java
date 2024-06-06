@@ -12,10 +12,10 @@ public class InMemoryTaskManager implements TaskManager {
 
 
     //Хранение задач
-    HashMap<Integer, Task> tasks = new HashMap<>();
-    HashMap<Integer, Epic> epics = new HashMap<>();
-    HashMap<Integer, Subtask> subtasks = new HashMap<>();
-    int idTicket = 1; //инициализируем счётчик id
+    private HashMap<Integer, Task> tasks = new HashMap<>();
+    private HashMap<Integer, Epic> epics = new HashMap<>();
+    private HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    private int idTicket = 1; //инициализируем счётчик id
     private HistoryManager history = Managers.getDefaultHistory();
 
     //Констуктор
@@ -49,11 +49,28 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void clearEpics() {
+
+
+        for(Epic e: epics.values()) {
+            ArrayList<Subtask> childSubtasks = getSubtaskOfEpic(e);
+
+            //удаляем дочерние сабтаски
+            for (Subtask s : childSubtasks) { //удаление субтаксов эпиков
+                subtasks.remove(s.getIdTicket());
+            }
+        }
+
+        //ощищаем хэшмап эпиков
         epics.clear();
+
     }
 
     @Override
     public void clearSubTasks() {
+        for(Integer s: subtasks.keySet()) { //персональное удаление каждого сабтаска
+            killIdSubtask(s); //удаляет сабтаск и корректирует родительский эпик
+        }
+        //ощищаем хэшмап сабтасков
         subtasks.clear();
     }
 

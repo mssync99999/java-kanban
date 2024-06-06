@@ -7,7 +7,7 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager{
     private List<Task> historyTask = new ArrayList<>();
-    private static final int maxSizeHistoryList = 3; //предельный размер стека для истории
+    private static final int maxSizeHistoryList = 10; //предельный размер стека для истории
 
     @Override
     public void add(Task task){
@@ -24,8 +24,10 @@ public class InMemoryHistoryManager implements HistoryManager{
 
     @Override
     public List<Task> getHistory(){
-    //...
-        return historyTask; //...последние 10 просмотренных задач
+    //...Следует создать его копию, передав коллекцию в конструктор ArrayList'a, либо же
+        // можно воспользоваться статическим методом copyOf из List)
+        List<Task> copyOfHistoryTask = new ArrayList<>(historyTask);
+        return copyOfHistoryTask; //...последние 10 просмотренных задач
     }
 
 }
