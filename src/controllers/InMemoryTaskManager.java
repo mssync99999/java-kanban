@@ -49,10 +49,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void clearEpics() {
-        for(Epic e: epics.values()) {
+        for (Epic e: epics.values()) {
             ArrayList<Subtask> childSubtasks = getSubtaskOfEpic(e);
             //удаляем дочерние сабтаски
-            for(Subtask s : childSubtasks) { //удаление субтаксов эпиков
+            for (Subtask s : childSubtasks) {
                 subtasks.remove(s.getIdTicket());
             }
         }
