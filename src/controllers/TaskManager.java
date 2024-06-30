@@ -14,7 +14,7 @@ public interface TaskManager {
 
     ArrayList<Subtask> getSubtasks();
 
-    ArrayList<Epic> getEpics() ;
+    ArrayList<Epic> getEpics();
 
     //b. Удаление всех задач.
     void clearTasks();
@@ -24,7 +24,7 @@ public interface TaskManager {
     void clearSubTasks();
 
     //c. Получение по идентификатору.
-    Task getIdTask(Integer t) ;
+    Task getIdTask(Integer t);
 
     Epic getIdEpic(Integer t);
 
