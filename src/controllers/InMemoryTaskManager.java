@@ -49,25 +49,21 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void clearEpics() {
-
-
-        for(Epic e: epics.values()) {
+        for (Epic e: epics.values()) {
             ArrayList<Subtask> childSubtasks = getSubtaskOfEpic(e);
-
             //удаляем дочерние сабтаски
-            for (Subtask s : childSubtasks) { //удаление субтаксов эпиков
+            for (Subtask s : childSubtasks) {
                 subtasks.remove(s.getIdTicket());
             }
         }
-
         //ощищаем хэшмап эпиков
         epics.clear();
-
     }
 
     @Override
     public void clearSubTasks() {
-        for(Integer s: subtasks.keySet()) { //персональное удаление каждого сабтаска
+        for (Integer s: subtasks.keySet()) {
+            //персональное удаление каждого сабтаска
             killIdSubtask(s); //удаляет сабтаск и корректирует родительский эпик
         }
         //ощищаем хэшмап сабтасков
@@ -122,7 +118,8 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void createSubtask(Subtask o) {//public void createTicket(Subtask o, Epic e)
+    public void createSubtask(Subtask o) {
+        //public void createTicket(Subtask o, Epic e)
         subtasks.put(idTicket, o); //новый тикет в хэш
         o.setIdTicket(idTicket);
         o.getParentEpic().addSubtask(o); //добавить подзадачу в список родительского Epic и пересчитать статус Epic
@@ -171,9 +168,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epics.containsKey(t)) {
             return; //Тикет не найден
         }
-
         ArrayList<Subtask> childSubtasks = getSubtaskOfEpic(epics.get(t));
-        for(Subtask s: childSubtasks){ //удаление субтаксов эпиков
+        for (Subtask s: childSubtasks) {
+            //удаление субтаксов эпиков
             subtasks.remove(s.getIdTicket());
         }
 
