@@ -1,8 +1,8 @@
 package tickets;
 
-import java.util.Objects;
+//import java.util.Objects;
 
-public class Subtask extends Task{
+public class Subtask extends Task {
     private Epic parentEpic; //Для каждой подзадачи известно, в рамках какого эпика она выполняется
 
     public Subtask(String typeTicket, String nameTicket, String descTicket, Status statusTicket, Epic epic) {
