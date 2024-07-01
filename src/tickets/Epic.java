@@ -1,10 +1,10 @@
 package tickets;
 
 import java.util.ArrayList;
-import java.util.Objects;
+//import java.util.Objects;
 
 
-public class Epic extends Task{
+public class Epic extends Task {
     private ArrayList<Subtask> childSubtasks = new ArrayList<>();
 
 
@@ -22,7 +22,7 @@ public class Epic extends Task{
     //запоминает список субтаксов, которые связаны с этим эпиков
     public void addSubtask(Subtask subtask) {
         //System.out.println(childSubtasks.contains(subtask));
-        if (childSubtasks.contains(subtask)==false){
+        if (childSubtasks.contains(subtask) == false) {
             childSubtasks.add(subtask);
         }
 
@@ -43,7 +43,7 @@ public class Epic extends Task{
         int workCount = 0;
         int doneCount = 0;
 
-        for (Subtask s: childSubtasks){
+        for (Subtask s: childSubtasks) {
 
             //contains(E e)
             if (s.getStatusTicket() == Status.NEW) {
