@@ -4,7 +4,7 @@ import tickets.Task;
 
 import java.util.*;
 
-public class InMemoryHistoryManager implements HistoryManager{
+public class InMemoryHistoryManager implements HistoryManager {
     //private List<Task> historyTask = new ArrayList<>();
     //private static final int maxSizeHistoryList = 10; //предельный размер стека для истории
     private Map<Integer, Node> mapNode = new LinkedHashMap<>();
@@ -12,7 +12,7 @@ public class InMemoryHistoryManager implements HistoryManager{
     private Node lastNode;
 
     @Override
-    public void add(Task task){
+    public void add(Task task) {
         if (task == null) return;
 
         remove(task.getIdTicket()); //вначале удалим
@@ -36,9 +36,9 @@ public class InMemoryHistoryManager implements HistoryManager{
         Node nodeA = node.getPrev(); // A<->b<->c
         Node nodeC = node.getNext(); // a<->b<->C
 
-        if (node.getPrev() != null ) nodeA.setNext(nodeC); //теперь нода левая смотрит на правую
+        if (node.getPrev() != null) nodeA.setNext(nodeC); //теперь нода левая смотрит на правую
 
-        if (node.getNext() != null ) nodeC.setPrev(nodeA); //теперь нода права смотрит на левую
+        if (node.getNext() != null) nodeC.setPrev(nodeA); //теперь нода права смотрит на левую
 
         //обновим поля в объекте класса
         if (lastNode.equals(node)) lastNode = lastNode.getPrev();
@@ -63,7 +63,7 @@ public class InMemoryHistoryManager implements HistoryManager{
 
 
     @Override
-    public List<Task> getHistory(){
+    public List<Task> getHistory() {
         return getTasks();
     }
 
@@ -73,7 +73,7 @@ public class InMemoryHistoryManager implements HistoryManager{
     private List<Task> getTasks() {
         LinkedList<Task> list = new LinkedList<>();
 
-        for(Node n: mapNode.values()){
+        for (Node n: mapNode.values()) {
             list.add(n.getData());
         }
 
