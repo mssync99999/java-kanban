@@ -1,12 +1,9 @@
 package controllers;
-
 import tickets.Task;
 import java.util.*;
 
 
 public class InMemoryHistoryManager implements HistoryManager {
-    //private List<Task> historyTask = new ArrayList<>();
-    //private static final int maxSizeHistoryList = 10; //предельный размер стека для истории
     private Map<Integer, Node> mapNode = new LinkedHashMap<>();
     private Node firstNode;
     private Node lastNode;

@@ -8,7 +8,7 @@ class ManagersTest {
     //убедитесь, что утилитарный класс всегда возвращает проинициализированные
     // и готовые к работе экземпляры менеджеров;
     @Test
-    void getDefault() {
+    void getDefaultTest() {
         TaskManager managerForTest = Managers.getDefault();
 
         assertTrue((managerForTest instanceof TaskManager) && managerForTest != null);
@@ -16,7 +16,7 @@ class ManagersTest {
 
 
     @Test
-    void getDefaultHistory() {
+    void getDefaultHistoryTest() {
         HistoryManager historyManagerForTest = Managers.getDefaultHistory();
 
         assertTrue((historyManagerForTest instanceof HistoryManager) && historyManagerForTest != null);

@@ -1,5 +1,4 @@
 package tickets;
-
 import java.util.Objects;
 
 public class Task {

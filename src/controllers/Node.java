@@ -19,10 +19,6 @@ public class Node {
         return data;
     }
 
-    public void setData(Task data) {
-        this.data = data;
-    }
-
     public Node getNext() {
         return next;
     }

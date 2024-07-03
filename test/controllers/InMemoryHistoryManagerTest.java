@@ -19,7 +19,7 @@ class InMemoryHistoryManagerTest {
     }
     //убедитесь, что задачи, добавляемые в HistoryManager, сохраняют предыдущую версию задачи и её данных.
     @Test
-    void addHistory() {
+    void addHistoryTest() {
         Task t1 = new Task("Task","Сравниваем таски","Создаём первый task", Status.NEW);
         managerForTest.createTask(t1);
         Task t2 = new Task("Task","Сравниваем таски","Создаём второй task", Status.DONE);
