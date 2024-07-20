@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Epic extends Task {
     private ArrayList<Subtask> childSubtasks = new ArrayList<>();
 
-
     public Epic(String typeTicket, String nameTicket, String descTicket) {
         // сначала вызываем конструктор класса-родителя
         super(typeTicket, nameTicket, descTicket, Status.NEW);//вызываем родителя с дефолтным Status.NEW
