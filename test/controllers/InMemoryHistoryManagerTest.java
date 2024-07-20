@@ -6,14 +6,18 @@ import tickets.Epic;
 import tickets.Status;
 import tickets.Task;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
     public TaskManager managerForTest;
 
     @BeforeEach
-    public void beforeEach() {
-
+    public void beforeEach() throws IOException {
+        Files.delete(Paths.get("FileBackedTaskManager.csv"));
         managerForTest = Managers.getDefault();
 
     }

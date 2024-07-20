@@ -8,6 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import tickets.*;
@@ -22,7 +26,8 @@ class InMemoryTaskManagerTest {
 
     //создаём тестовый набо тикетов для проверки базовых методом
     @BeforeEach
-    public void beforeEach() {
+    public void beforeEach() throws IOException {
+        Files.delete(Paths.get("FileBackedTaskManager.csv"));
         //epic = new Epic("Epic 1", "description Epic 1");
         managerForTest = Managers.getDefault();
         epicForTest = new Epic("Epic","Создаём Epic для теста","выполнить перед каждым тестом");
@@ -95,5 +100,6 @@ class InMemoryTaskManagerTest {
     void getIdSubtaskTest() {
         assertEquals(subtaskForTest, managerForTest.getIdSubtask(2));
     }
+
 
 }
