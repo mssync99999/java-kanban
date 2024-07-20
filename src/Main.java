@@ -13,11 +13,17 @@ public class Main {
 
         System.out.println("Поехали !");
 
-        TaskManager manager = Managers.getDefault(); //...
+        TaskManager manager = Managers.getDefault(); //включено чтение и сохранение на диск
 
-        /*
-        Дополнительное задание. Реализуем пользовательский сценарий
-        */
+
+        printAllTasks(manager, "Смотрим что загружено с диска");
+
+        oldTestCase(manager); //проверка
+
+
+    }
+
+    public static void oldTestCase(TaskManager manager) {
 
         //Создайте две задачи
         Task t1 = new Task("Task","Task1","Desc1", Status.NEW);
@@ -66,12 +72,7 @@ public class Main {
         printAllTasks(manager,"Удалите эпик с тремя подзадачами и убедитесь, что из истории удалился как сам эпик, так и все его подзадачи. Просмотрели таск");
 
 
-
-
-
     }
-
-
 
 
     //новая версия внутреннего тестирования из спринта 5

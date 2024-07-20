@@ -101,6 +101,11 @@ public class InMemoryTaskManager implements TaskManager {
         return subtasks.get(t);
     }
 
+    //добавлено в спринте №7
+    public void setIdTicketManager(int idTicket) {
+        this.idTicket = idTicket;
+    }
+
     //d. Создание. Сам объект должен передаваться в качестве параметра.
     @Override
     public void createTask(Task o) {
