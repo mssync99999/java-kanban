@@ -11,7 +11,7 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private File fileTask;
-    static private String headString = "IdTicket,TypeTicket,NameTicket,DescTicket,StatusTicket,epicId";
+    private static String headString = "IdTicket,TypeTicket,NameTicket,DescTicket,StatusTicket,epicId";
 
     public FileBackedTaskManager(String fileTask) {
         this.fileTask = new File(fileTask);
@@ -51,23 +51,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             //вначале запишем заголовок
             String headString = this.headString; //"IdTicket,TypeTicket,NameTicket,DescTicket,StatusTicket,epicId";
-            bw.write(headString+ "\n");
+            bw.write(headString + "\n");
 
             //получаем список тасков и записываем в файл
             ArrayList<Task> t = super.getTasks();
-            for(Task tmp: t ){
+            for (Task tmp: t) {
                 bw.write(toString(tmp) + "\n");
             }
 
             //получаем список эпиков и записываем в файл
             ArrayList<Epic> e = super.getEpics();
-            for(Task tmp: e ){
+            for (Task tmp: e) {
                 bw.write(toString(tmp) + "\n");
             }
 
             //получаем список сабтасков и записываем в файл
             ArrayList<Subtask> st = super.getSubtasks();
-            for(Task tmp: st ){
+            for (Task tmp: st) {
                 bw.write(toString(tmp) + "\n");
             }
 
