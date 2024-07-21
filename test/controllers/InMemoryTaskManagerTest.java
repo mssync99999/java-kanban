@@ -8,6 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import tickets.*;
@@ -22,7 +26,8 @@ class InMemoryTaskManagerTest {
 
     //создаём тестовый набо тикетов для проверки базовых методом
     @BeforeEach
-    public void beforeEach() {
+    public void beforeEach() throws IOException {
+        Files.delete(Paths.get("FileBackedTaskManager.csv"));
         //epic = new Epic("Epic 1", "description Epic 1");
         managerForTest = Managers.getDefault();
         epicForTest = new Epic("Epic","Создаём Epic для теста","выполнить перед каждым тестом");
@@ -38,40 +43,40 @@ class InMemoryTaskManagerTest {
 
     //проверка получения списка тасков
     @Test
-    void getTasks() {
+    void getTasksTest() {
         assertEquals(taskForTest, managerForTest.getTasks().getFirst());
     }
 
 
     //проверка получения списка сабтасков
     @Test
-    void getSubtasks() {
+    void getSubtasksTest() {
         assertEquals(subtaskForTest, managerForTest.getSubtasks().getFirst());
     }
 
     //проверка получения списка эпиков
     @Test
-    void getEpics() {
+    void getEpicsTest() {
         assertEquals(epicForTest, managerForTest.getEpics().getFirst());
     }
 
     //проверка очистки тасков
     @Test
-    void clearTasks() {
+    void clearTasksTest() {
         managerForTest.clearTasks();
         assertTrue(managerForTest.getTasks().size() == 0);
     }
 
     //проверка очистки эпиков
     @Test
-    void clearEpics() {
+    void clearEpicsTest() {
         managerForTest.clearEpics();
         assertTrue(managerForTest.getEpics().size() == 0);
     }
 
     //проверка очистки сабтасков
     @Test
-    void clearSubTasks() {
+    void clearSubTasksTest() {
         managerForTest.clearSubTasks();
         assertTrue(managerForTest.getSubtasks().size() == 0);
     }
@@ -79,21 +84,22 @@ class InMemoryTaskManagerTest {
     //проверьте, что InMemoryTaskManager
     //действительно добавляет задачи разного типа и может найти их по id;
     @Test
-    void getIdTask() {
+    void getIdTaskTest() {
 
         assertEquals(taskForTest, managerForTest.getIdTask(3));
     }
 
     //проверка получения эпика по номеру
     @Test
-    void getIdEpic() {
+    void getIdEpicTest() {
         assertEquals(epicForTest, managerForTest.getIdEpic(1));
     }
 
     //поверка получения сабтаска по номеру
     @Test
-    void getIdSubtask() {
+    void getIdSubtaskTest() {
         assertEquals(subtaskForTest, managerForTest.getIdSubtask(2));
     }
+
 
 }

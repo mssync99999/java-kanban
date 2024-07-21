@@ -6,20 +6,24 @@ import tickets.Epic;
 import tickets.Status;
 import tickets.Task;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
     public TaskManager managerForTest;
 
     @BeforeEach
-    public void beforeEach() {
-
+    public void beforeEach() throws IOException {
+        Files.delete(Paths.get("FileBackedTaskManager.csv"));
         managerForTest = Managers.getDefault();
 
     }
     //убедитесь, что задачи, добавляемые в HistoryManager, сохраняют предыдущую версию задачи и её данных.
     @Test
-    void addHistory() {
+    void addHistoryTest() {
         Task t1 = new Task("Task","Сравниваем таски","Создаём первый task", Status.NEW);
         managerForTest.createTask(t1);
         Task t2 = new Task("Task","Сравниваем таски","Создаём второй task", Status.DONE);

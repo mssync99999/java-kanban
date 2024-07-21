@@ -1,5 +1,4 @@
 package controllers;
-
 import tickets.Epic;
 import tickets.Subtask;
 import tickets.Task;
@@ -100,6 +99,11 @@ public class InMemoryTaskManager implements TaskManager {
 
         history.add(subtasks.get(t)); //сохраним историю просмотров
         return subtasks.get(t);
+    }
+
+    //добавлено в спринте №7
+    public void setIdTicketManager(int idTicket) {
+        this.idTicket = idTicket;
     }
 
     //d. Создание. Сам объект должен передаваться в качестве параметра.

@@ -1,7 +1,5 @@
 package controllers;
-
 import tickets.Task;
-
 import java.util.List;
 
 public interface HistoryManager {

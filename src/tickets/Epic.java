@@ -1,12 +1,9 @@
 package tickets;
-
 import java.util.ArrayList;
-//import java.util.Objects;
 
 
 public class Epic extends Task {
     private ArrayList<Subtask> childSubtasks = new ArrayList<>();
-
 
     public Epic(String typeTicket, String nameTicket, String descTicket) {
         // сначала вызываем конструктор класса-родителя
