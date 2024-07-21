@@ -1,5 +1,6 @@
 package controllers;
 
+import exceptions.ManagerSaveException;
 import tickets.Epic;
 import tickets.Status;
 import tickets.Subtask;
@@ -7,7 +8,6 @@ import tickets.Task;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private File fileTask;
@@ -18,7 +18,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     //создайте статический метод, который будет восстанавливать данные менеджера из файла при запуске программы.
-    static FileBackedTaskManager loadFromFile(String fileTask) {
+    public static FileBackedTaskManager loadFromFile(String fileTask) {
 
         FileBackedTaskManager manager = new FileBackedTaskManager(fileTask);
         if (!manager.fileTask.exists()) {
@@ -36,17 +36,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
             }
 
-        } catch (FileNotFoundException e) {
-         //   throw new ManagerLoadException(e.getMessage());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            //throw new RuntimeException(e);
+            throw new ManagerSaveException("Can't read form file: " + manager.fileTask.getName());
         }
         return manager;
     }
 
 
     //должен сохранять все задачи, подзадачи и эпики.
-    public void save() throws ManagerSaveException {
+    public void save() /*throws ManagerSaveException*/ {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileTask))) {
 
             //вначале запишем заголовок
@@ -72,9 +71,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
 
 
-        } catch (ManagerSaveException e) {
-            throw new ManagerSaveException(e.getMessage());
-            //System.out.println("Произошла ошибка во время записи файла.");
         } catch (IOException e) {
             throw new ManagerSaveException(e.getMessage());
         }
@@ -247,17 +243,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         save();
     }
 
-    @Override
-    public ArrayList<Subtask> getSubtaskOfEpic(Epic e) {
-        ArrayList<Subtask> r = super.getSubtaskOfEpic(e);
-        save();
-        return r;
-    }
 
-    @Override
-    public List<Task> getHistory() {
-        List<Task> r = super.getHistory();
-        save();
-        return r;
-    }
+
 }
