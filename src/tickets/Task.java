@@ -49,18 +49,7 @@ public class Task  implements Comparable<Task> {
         this.startTime = startTime;
     }
 
-    //+Проверяем пересечения с помощью Stream API
-    /*
-    public boolean isIntersection(Task task) {
 
-        if (task == null || task.getStartTime() == null || this.getStartTime() == null) {
-            return false;
-        }
-        return !this.getEndTime().isBefore(task.getStartTime()) && !this.getStartTime().isAfter(task.getEndTime());
-
-
-    }
-*/
 
     public void setStatusTicket(Status statusTicket) {
         this.statusTicket = statusTicket;

@@ -11,7 +11,7 @@ public class Epic extends Task {
 
     public Epic(String typeTicket, String nameTicket, String descTicket) {
         // сначала вызываем конструктор класса-родителя
-        super(typeTicket, nameTicket, descTicket, Status.NEW, Duration.ofMinutes(0), LocalDateTime.of(2099, 5, 15, 11, 21, 41 ));//вызываем родителя с дефолтным Status.NEW
+        super(typeTicket, nameTicket, descTicket, Status.NEW, Duration.ofMinutes(0), LocalDateTime.of(2099, 5, 15, 11, 21, 41));//вызываем родителя с дефолтным Status.NEW
 
         // затем инициализируем новые поля
     }
@@ -51,13 +51,13 @@ public class Epic extends Task {
             durationInMinutes += s.getDuration().toMinutes();
 
             //+Время начала — дата старта самой ранней подзадачи
-            if (getStartTime() == null || getStartTime().isAfter(s.getStartTime())){
+            if (getStartTime() == null || getStartTime().isAfter(s.getStartTime())) {
                 setStartTime(s.getStartTime());
             }
 
             //LocalDateTime endTimeSubtask = getEndTime();
             //+время завершения — время окончания самой поздней из подзадач
-            if (getEndTime() == null || getEndTime().isBefore(s.getEndTime())){
+            if (getEndTime() == null || getEndTime().isBefore(s.getEndTime())) {
                 endTime = s.getEndTime();
             }
 
