@@ -56,4 +56,8 @@ public interface TaskManager {
     //История просмотров задач - 10 последних задач
     List<Task> getHistory();
 
+    //+Выводим список задач в порядке приоритета
+    List<Task> getPrioritizedTasks();
+
+    boolean isIntersection(Task o);
 }
