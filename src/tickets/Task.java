@@ -124,6 +124,6 @@ public class Task  implements Comparable<Task> {
         if (o.getStartTime() != null) otherDT = o.getStartTime();
 
 
-        return thisDT .compareTo(otherDT);
+        return thisDT.compareTo(otherDT);
     }
 }
