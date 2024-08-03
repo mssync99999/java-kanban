@@ -90,5 +90,9 @@ public class Epic extends Task {
 
     }
 
-
+    //+дата и время завершения задачи
+    @Override
+    public LocalDateTime getEndTime() {
+        return this.endTime;
+    }
 }

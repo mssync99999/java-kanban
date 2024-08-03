@@ -87,9 +87,17 @@ public class Task  implements Comparable<Task> {
                 ", typeTicket='" + typeTicket + '\'' +
                 ", nameTicket='" + nameTicket + '\'' +
                 ", descTicket='" + descTicket + '\'' +
-                ", statusTicket=" + statusTicket +
+                ", statusTicket='" + statusTicket + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + getEndTime() + '\'' +
+                ", duration='" + duration + '\'' +
                 '}';
     }
+
+    /*
+            this.startTime = startTime; //+
+        this.duration = duration; //+
+     */
 
     @Override
     public boolean equals(Object o) {

@@ -39,14 +39,13 @@ public class Main {
         //Создайте также эпик с тремя подзадачами
         Epic e1 = new Epic("Epic","Epic1","Desc3");
         manager.createEpic(e1);
-        Subtask s1 = new Subtask("Subtask","Subtask1","Desc4", Status.NEW, Duration.ofMinutes(35), LocalDateTime.of(2024, 5, 15, 11, 21, 41), e1);
+        Subtask s1 = new Subtask("Subtask","Subtask1","Desc4", Status.NEW, Duration.ofMinutes(31), LocalDateTime.of(2024, 5, 15, 11, 21, 41), e1);
         manager.createSubtask(s1);
-        Subtask s2 = new Subtask("Subtask","Subtask2","Desc5", Status.NEW, Duration.ofMinutes(35), LocalDateTime.of(2024, 6, 16, 12, 22, 42), e1);
+        Subtask s2 = new Subtask("Subtask","Subtask2","Desc5", Status.NEW, Duration.ofMinutes(32), LocalDateTime.of(2024, 6, 16, 12, 22, 42), e1);
         manager.createSubtask(s2);
         Subtask s3 = new Subtask("Subtask","Subtask3","Desc6", Status.NEW, Duration.ofMinutes(35), LocalDateTime.of(2024, 7, 17, 13, 23, 43), e1);
-
-
         manager.createSubtask(s3);
+
 
         //Создайте эпик без подзадач.
         Epic e2 = new Epic("Epic","Epic2","Desc6");
@@ -54,6 +53,9 @@ public class Main {
 
         //Распечатайте списки эпиков, задач и подзадач через System.out.println(..).
         printAllTasks(manager, "создали 2 таска, 1 эпик и 3 субтаск, 1 эпик без субтаск.");
+
+        System.out.println("Важно s ===>" + e1.getStartTime());
+        System.out.println("Важно e ===>" + e1.getEndTime());
 
         //имитация просмотров тикетов
         manager.getIdTask(t1.getIdTicket());

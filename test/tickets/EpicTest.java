@@ -25,6 +25,24 @@ class EpicTest {
     }
 
 
+    @Test
+    void startAndEndDate() {
+        LocalDateTime a = LocalDateTime.of(2024, 1, 10, 11, 12, 13 );
+        Subtask subtaskForTest1 = new Subtask("Subtask","Создаём Subtask1  для теста","проверим дату начала и завершения эпика", Status.NEW, Duration.ofMinutes(60), a, epicForTest);
+        managerForTest.createSubtask(subtaskForTest1);
+
+        LocalDateTime b = LocalDateTime.of(2024, 2, 1, 1, 2, 3 );
+        Subtask subtaskForTest2 = new Subtask("Subtask","Создаём Subtask2  для теста","проверим дату начала и завершения эпика", Status.NEW, Duration.ofMinutes(30), b, epicForTest);
+        managerForTest.createSubtask(subtaskForTest2);
+
+        //System.out.println(epicForTest.getStartTime()); //2024-01-10T11:12:13
+        //System.out.println(epicForTest.getEndTime());
+        //System.out.println(b.plus(Duration.ofMinutes(30))); //2024-02-01T01:32:03
+
+        assertTrue(epicForTest.getStartTime() == a);
+        assertEquals(epicForTest.getEndTime(), b.plus(Duration.ofMinutes(30)));
+    }
+
     //только что созданный эпик не содержит дочерних субтасков
     @Test
     void getChildSubtasks() {
