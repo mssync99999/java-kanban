@@ -1,7 +1,9 @@
 package tickets;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Task {
+public class Task  implements Comparable<Task> {
 
 
     private int idTicket;
@@ -9,14 +11,44 @@ public class Task {
     private String nameTicket;
     private String descTicket;
     private Status statusTicket;// = Status.NEW;
+    private Duration duration; // +продолжительность задачи, оценка того, сколько времени она займёт в минутах
+    private LocalDateTime startTime; // +дата и время, когда предполагается приступить к выполнению задачи
 
-    public Task(String typeTicket, String nameTicket, String descTicket, Status statusTicket) {
+
+
+    public Task(String typeTicket, String nameTicket, String descTicket, Status statusTicket, Duration duration, LocalDateTime startTime) {
         this.typeTicket = typeTicket; //
         this.nameTicket = nameTicket;
         this.descTicket = descTicket;
         this.statusTicket = statusTicket;
-
+        this.startTime = startTime; //+
+        this.duration = duration; //+
     }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    //+дата и время завершения задачи
+    public LocalDateTime getEndTime() {
+        if (startTime == null) {
+            return null;
+        }
+        return startTime.plus(duration);
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
 
 
     public void setStatusTicket(Status statusTicket) {
@@ -55,9 +87,17 @@ public class Task {
                 ", typeTicket='" + typeTicket + '\'' +
                 ", nameTicket='" + nameTicket + '\'' +
                 ", descTicket='" + descTicket + '\'' +
-                ", statusTicket=" + statusTicket +
+                ", statusTicket='" + statusTicket + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + getEndTime() + '\'' +
+                ", duration='" + duration + '\'' +
                 '}';
     }
+
+    /*
+            this.startTime = startTime; //+
+        this.duration = duration; //+
+     */
 
     @Override
     public boolean equals(Object o) {
@@ -70,5 +110,17 @@ public class Task {
     @Override
     public int hashCode() {
         return Objects.hash(idTicket, typeTicket, nameTicket, descTicket, statusTicket);
+    }
+
+    @Override
+    public int compareTo(Task o) {
+        LocalDateTime thisDT = LocalDateTime.MAX;
+        LocalDateTime otherDT = LocalDateTime.MAX;
+
+        if (this.getStartTime() != null) thisDT = this.getStartTime();
+        if (o.getStartTime() != null) otherDT = o.getStartTime();
+
+
+        return thisDT.compareTo(otherDT);
     }
 }

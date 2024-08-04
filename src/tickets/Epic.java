@@ -1,13 +1,17 @@
 package tickets;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 
 public class Epic extends Task {
     private ArrayList<Subtask> childSubtasks = new ArrayList<>();
+    private LocalDateTime endTime; //+Для реализации getEndTime() удобно добавить поле endTime в Epic и рассчитать его вместе с другими полями.
 
     public Epic(String typeTicket, String nameTicket, String descTicket) {
         // сначала вызываем конструктор класса-родителя
-        super(typeTicket, nameTicket, descTicket, Status.NEW);//вызываем родителя с дефолтным Status.NEW
+        super(typeTicket, nameTicket, descTicket, Status.NEW, Duration.ofMinutes(0), LocalDateTime.of(2099, 5, 15, 11, 21, 41));//вызываем родителя с дефолтным Status.NEW
 
         // затем инициализируем новые поля
     }
@@ -40,7 +44,22 @@ public class Epic extends Task {
         int workCount = 0;
         int doneCount = 0;
 
+        int durationInMinutes = 0;
         for (Subtask s: childSubtasks) {
+
+            //+Продолжительность эпика — сумма продолжительностей всех его подзадач.
+            durationInMinutes += s.getDuration().toMinutes();
+
+            //+Время начала — дата старта самой ранней подзадачи
+            if (getStartTime() == null || getStartTime().isAfter(s.getStartTime())) {
+                setStartTime(s.getStartTime());
+            }
+
+            //LocalDateTime endTimeSubtask = getEndTime();
+            //+время завершения — время окончания самой поздней из подзадач
+            if (getEndTime() == null || getEndTime().isBefore(s.getEndTime())) {
+                endTime = s.getEndTime();
+            }
 
             //contains(E e)
             if (s.getStatusTicket() == Status.NEW) {
@@ -52,6 +71,9 @@ public class Epic extends Task {
             }
 
         }
+
+        //+Продолжительность эпика — сумма продолжительностей всех его подзадач.
+        setDuration(Duration.of(durationInMinutes, ChronoUnit.MINUTES));
 
         //присвоение общего статуса субтасков родительскому эпику
         if (doneCount == childSubtasks.size()) {
@@ -68,5 +90,9 @@ public class Epic extends Task {
 
     }
 
-
+    //+дата и время завершения задачи
+    @Override
+    public LocalDateTime getEndTime() {
+        return this.endTime;
+    }
 }

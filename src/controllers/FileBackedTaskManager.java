@@ -7,22 +7,28 @@ import tickets.Subtask;
 import tickets.Task;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+
+import java.time.Duration; //+
+import java.time.LocalDateTime; //+
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private File fileTask;
-    private static String headString = "IdTicket,TypeTicket,NameTicket,DescTicket,StatusTicket,epicId";
+    private static String headString = "IdTicket,TypeTicket,NameTicket,DescTicket,StatusTicket,duration,startTime,epicId";
 
     public FileBackedTaskManager(String fileTask) {
         this.fileTask = new File(fileTask);
     }
 
     //создайте статический метод, который будет восстанавливать данные менеджера из файла при запуске программы.
-    public static FileBackedTaskManager loadFromFile(String fileTask) {
+    public static FileBackedTaskManager loadFromFile(String fileTask)  {
 
         FileBackedTaskManager manager = new FileBackedTaskManager(fileTask);
         if (!manager.fileTask.exists()) {
             return manager;
+          //  throw new IOException;
+
         }
 
 
@@ -49,7 +55,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileTask))) {
 
             //вначале запишем заголовок
-            String headString = this.headString; //"IdTicket,TypeTicket,NameTicket,DescTicket,StatusTicket,epicId";
+            String headString = this.headString; //"IdTicket,TypeTicket,NameTicket,DescTicket,StatusTicket,duration,startTime,epicId";
             bw.write(headString + "\n");
 
             //получаем список тасков и записываем в файл
@@ -81,8 +87,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public String toString(Task task) {
 
+        int durationMinutes = 0;
+        if (task.getDuration() != null) durationMinutes = (int) task.getDuration().toMinutes();
+
         String s = task.getIdTicket() + "," + task.getTypeTicket() + "," + task.getNameTicket()
-                + "," + task.getDescTicket() + "," + task.getStatusTicket();
+                + "," + task.getDescTicket() + "," + task.getStatusTicket()
+                + "," + durationMinutes + "," + task.getStartTime(); //+ добавьте в методы сериализации/десериализации новые поля
 
         int epicId = 0;
 
@@ -102,18 +112,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String nameTicket = split[2];
         String descTicket = split[3];
         Status statusTicket = Status.valueOf(split[4]);
-        int epicId = Integer.parseInt(split[5]);
+        Duration duration = Duration.ofMinutes(Integer.parseInt(split[5])); //+
+        LocalDateTime startTime = LocalDateTime.parse(split[6]); //+
+        int epicId = Integer.parseInt(split[7]);
 
         if ("Subtask".equals(typeTicket)) {
             Epic parentEpic = super.getIdEpic(epicId); //найдём родительский эпик
-            Subtask tmp = new Subtask(typeTicket, nameTicket, descTicket, statusTicket, parentEpic); //создаём объект
+            Subtask tmp = new Subtask(typeTicket, nameTicket, descTicket, statusTicket, duration, startTime, parentEpic); //создаём объект
             super.setIdTicketManager(idTicket); //установим сквозной счётчик уникальных тикетов
             super.createSubtask(tmp); //регистрируем в коллекциях или хэшах
             return tmp;
         }
 
         if ("Task".equals(typeTicket)) {
-            Task tmp = new Task(typeTicket, nameTicket, descTicket, statusTicket); //создаём объект
+            Task tmp = new Task(typeTicket, nameTicket, descTicket, statusTicket, duration, startTime); //создаём объект
             super.setIdTicketManager(idTicket); //установим сквозной счётчик уникальных тикетов
             super.createTask(tmp); //регистрируем в коллекциях или хэшах
             return tmp;

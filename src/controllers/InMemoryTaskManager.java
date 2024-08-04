@@ -3,9 +3,7 @@ import tickets.Epic;
 import tickets.Subtask;
 import tickets.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -16,9 +14,17 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private int idTicket = 1; //инициализируем счётчик id
     private HistoryManager history = Managers.getDefaultHistory();
+    private Set<Task> tasksSet = new TreeSet<>(); //+Можно хранить все задачи заранее отсортированными с помощью класса TreeSet.
 
     //Констуктор
     public InMemoryTaskManager() {
+    }
+
+    //+
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        //+Можно хранить все задачи заранее отсортированными с помощью класса TreeSet.
+        return new ArrayList<>(tasksSet);
     }
 
 
@@ -43,17 +49,16 @@ public class InMemoryTaskManager implements TaskManager {
     //b. Удаление всех задач.
     @Override
     public void clearTasks() {
+        for (Integer s: tasks.keySet()) {
+            killIdTask(s);
+        }
         tasks.clear();
     }
 
     @Override
     public void clearEpics() {
-        for (Epic e: epics.values()) {
-            ArrayList<Subtask> childSubtasks = getSubtaskOfEpic(e);
-            //удаляем дочерние сабтаски
-            for (Subtask s : childSubtasks) {
-                subtasks.remove(s.getIdTicket());
-            }
+        for (Integer s: epics.keySet()) {
+            killIdEpic(s);
         }
         //ощищаем хэшмап эпиков
         epics.clear();
@@ -109,9 +114,17 @@ public class InMemoryTaskManager implements TaskManager {
     //d. Создание. Сам объект должен передаваться в качестве параметра.
     @Override
     public void createTask(Task o) {
+
+        //+проверка на пересечения
+        if (isIntersection(o)) {
+            return;
+        }
+
         tasks.put(idTicket, o); //новый тикет в хэш
         o.setIdTicket(idTicket);
         idTicket++; //инкримент счётчика уникальных id
+
+        tasksSet.add(o); //+
     }
 
     @Override
@@ -119,21 +132,36 @@ public class InMemoryTaskManager implements TaskManager {
         epics.put(idTicket, o); //новый тикет в хэш
         o.setIdTicket(idTicket);
         idTicket++; //инкримент счётчика уникальных id
+
+        //tasksSet.add(o); //+
     }
 
     @Override
     public void createSubtask(Subtask o) {
         //public void createTicket(Subtask o, Epic e)
+
+        //+проверка на пересечения
+        if (isIntersection(o)) {
+            return;
+        }
+
         subtasks.put(idTicket, o); //новый тикет в хэш
         o.setIdTicket(idTicket);
         o.getParentEpic().addSubtask(o); //добавить подзадачу в список родительского Epic и пересчитать статус Epic
         idTicket++; //инкримент счётчика уникальных id
+
+        tasksSet.add(o); //+
     }
 
     //e. Обновление. Новая версия объекта с верным идентификатором передаётся в виде параметра.
     @Override
     public void updateTask(Task upd, Task old) {
         //System.out.println(old.getIdTicket());
+        //+проверка на пересечения
+        if (isIntersection(upd)) {
+            return;
+        }
+
         upd.setIdTicket(old.getIdTicket());
         tasks.put(old.getIdTicket(), upd);
     }
@@ -148,6 +176,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubtask(Subtask upd, Subtask old) {
         //System.out.println(old.getIdTicket());
+        //+проверка на пересечения
+        if (isIntersection(upd)) {
+            return;
+        }
         upd.setIdTicket(old.getIdTicket());
         subtasks.put(old.getIdTicket(), upd);
 
@@ -164,6 +196,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (!tasks.containsKey(t)) {
             return; //Тикет не найден
         }
+
+        history.remove(t);
+        tasksSet.remove(tasks.get(t)); //+
         tasks.remove(t);
     }
 
@@ -175,9 +210,14 @@ public class InMemoryTaskManager implements TaskManager {
         ArrayList<Subtask> childSubtasks = getSubtaskOfEpic(epics.get(t));
         for (Subtask s: childSubtasks) {
             //удаление субтаксов эпиков
+            history.remove(s.getIdTicket());
+            tasksSet.remove(subtasks.get(s.getIdTicket()));
             subtasks.remove(s.getIdTicket());
+            //killIdSubtask(su.getIdTicket());
         }
 
+        history.remove(t);
+        tasksSet.remove(epics.get(t)); //+
         epics.remove(t);
     }
 
@@ -191,7 +231,8 @@ public class InMemoryTaskManager implements TaskManager {
         Subtask s = subtasks.get(t);
         s.getParentEpic().killSubtask(s); //подчищаем связанных с эпиком субтасков
 
-
+        history.remove(t);
+        tasksSet.remove(subtasks.get(t)); //+
         subtasks.remove(t);
     }
 
@@ -210,4 +251,15 @@ public class InMemoryTaskManager implements TaskManager {
         return history.getHistory();
     }
 
+    //+Проверяем пересечения с помощью Stream API
+    @Override
+    public boolean isIntersection(Task o) {
+        for (Task t : tasksSet) {
+
+            if (o.getStartTime().isAfter(t.getStartTime()) && o.getStartTime().isBefore(t.getEndTime())) return true;
+            if (o.getEndTime().isAfter(t.getStartTime()) && o.getEndTime().isBefore(t.getEndTime())) return true;
+
+        }
+        return false;
+    }
 }
