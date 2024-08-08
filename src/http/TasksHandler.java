@@ -204,7 +204,7 @@ public class TasksHandler implements HttpHandler {
 
 
 
-    public void parseRequestJson (String bodyRequest) {
+    public void parseRequestJson(String bodyRequest) {
         JsonElement jsonElement = JsonParser.parseString(bodyRequest);
         JsonObject jsonObject = jsonElement.getAsJsonObject();
 
