@@ -17,7 +17,7 @@ public class Main {
 
     public static int numberOfTest = 1; //для внутреннего тестирования
 
-    public static void main(String[] args) throws IOException {
+    public static void mainOld(String[] args) throws IOException {
 
         System.out.println("Поехали !");
 

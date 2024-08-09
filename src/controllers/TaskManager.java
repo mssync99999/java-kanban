@@ -1,4 +1,5 @@
 package controllers;
+import com.google.gson.Gson;
 import tickets.Epic;
 import tickets.Subtask;
 import tickets.Task;
@@ -60,4 +61,8 @@ public interface TaskManager {
     List<Task> getPrioritizedTasks();
 
     boolean isIntersection(Task o);
+
+    void createGsonBuilder();
+
+    Gson getGson();
 }
