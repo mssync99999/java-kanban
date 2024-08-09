@@ -16,17 +16,19 @@ import java.util.*;
 
 public class TasksHandler implements HttpHandler {
     private TaskManager manager;
-    private String typeTicket; // = jsonObject.get("typeTicket").getAsString();
-    private String nameTicket; // = jsonObject.get("nameTicket").getAsString();
-    private String descTicket; // = jsonObject.get("descTicket").getAsString();
-    private String statusTicket; // = jsonObject.get("statusTicket").getAsString();
-    private int durationMinutes; // = jsonObject.get("duration").getAsInt();
+    private Gson gson;
+    private String typeTicket;
+    private String nameTicket;
+    private String descTicket;
+    private String statusTicket;
+    private int durationMinutes;
     //String startTimeString = jsonObject.get("startTime").getAsString();
     private LocalDateTime startTime; //
     private Integer parentEpicId;
 
     public TasksHandler(TaskManager manager) {
         this.manager = manager;
+        this.gson = manager.getGson();
     }
 
     @Override
@@ -41,7 +43,7 @@ public class TasksHandler implements HttpHandler {
             String[] idQueryStr = path.split("/");
             System.out.println("idQueryStr.length=" + idQueryStr.length);
             idQueryInt = Integer.parseInt(idQueryStr[2]);
-            //endpoint = idQueryStr[1];
+
         } catch (NumberFormatException e) {
             idQueryInt = -1;
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -53,22 +55,19 @@ public class TasksHandler implements HttpHandler {
         System.out.println("endpoint: " + endpoint);
         System.out.println("query: " + idQueryInt);
 
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .setPrettyPrinting()
-                .create(); // завершаем построение объекта
+
 
         // считываем тело запроса и преобразуем в строку
         InputStream inputStream = exchange.getRequestBody();
         String bodyRequest = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
 
         //очищаем поля, затем парсим тело, если Json
-        this.typeTicket = null; // = jsonObject.get("typeTicket").getAsString();
-        this.nameTicket = null; // = jsonObject.get("nameTicket").getAsString();
-        this.descTicket = null; // = jsonObject.get("descTicket").getAsString();
-        this.statusTicket = null; // = jsonObject.get("statusTicket").getAsString();
-        this.durationMinutes = 0; // = jsonObject.get("duration").getAsInt();
-        //String startTimeString = jsonObject.get("startTime").getAsString();
+        this.typeTicket = null;
+        this.nameTicket = null;
+        this.descTicket = null;
+        this.statusTicket = null;
+        this.durationMinutes = 0;
+
         this.startTime = null; //
         this.parentEpicId = null;
 
@@ -235,8 +234,6 @@ public class TasksHandler implements HttpHandler {
                     this.parentEpicId = (Integer) jsonObject.get("parentEpicId").getAsInt();
                     break;
                 default:
-                    //...
-                    //break;
             }
         }
 

@@ -1,4 +1,6 @@
 package controllers;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import tickets.Epic;
 import tickets.Subtask;
 import tickets.Task;
@@ -15,9 +17,11 @@ public class InMemoryTaskManager implements TaskManager {
     private int idTicket = 1; //инициализируем счётчик id
     private HistoryManager history = Managers.getDefaultHistory();
     private Set<Task> tasksSet = new TreeSet<>(); //+Можно хранить все задачи заранее отсортированными с помощью класса TreeSet.
+    private Gson gson;
 
     //Констуктор
     public InMemoryTaskManager() {
+        createGsonBuilder();
     }
 
     //+
@@ -261,5 +265,18 @@ public class InMemoryTaskManager implements TaskManager {
 
         }
         return false;
+    }
+
+    @Override
+    public void createGsonBuilder() {
+        this.gson = new GsonBuilder()
+                .serializeNulls()
+                .setPrettyPrinting()
+                .create(); // завершаем построение объекта
+
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 }
